@@ -10,7 +10,7 @@ public interface ApiComponents {
     String ROOT_PATH = "api/v1/";
     interface FraudCheck
     {
-        String PATH = ROOT_PATH + "fraud-check";
+        String PATH = "api/v1/fraud-check";
         String CUSTOMER_ID_VARIABLE = "customerId";
     }
 }

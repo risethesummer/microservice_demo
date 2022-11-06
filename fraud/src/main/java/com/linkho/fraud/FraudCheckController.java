@@ -13,14 +13,14 @@ import org.springframework.web.bind.annotation.*;
 @Slf4j
 @AllArgsConstructor
 @RestController
-@RequestMapping(ApiComponents.FraudCheck.PATH)
+@RequestMapping("api/v1/fraud-check")
 public class FraudCheckController {
 
     private final FraudCheckService fraudCheckService;
 
-    @GetMapping(path = "{" + ApiComponents.FraudCheck.CUSTOMER_ID_VARIABLE + "}")
+    @GetMapping(path = "{customerId}")
     public FraudCheckResponse checkFraudster(
-            @PathVariable(ApiComponents.FraudCheck.CUSTOMER_ID_VARIABLE) Integer customerId)
+            @PathVariable("customerId") Integer customerId)
     {
         boolean isFraudulentCustomer = fraudCheckService.isFraudulentCustomer(customerId);
         log.info("fraud check request for customer {}", customerId);
