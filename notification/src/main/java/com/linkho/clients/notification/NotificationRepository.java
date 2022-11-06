@@ -8,5 +8,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
  * Date 11/6/2022 - 9:12 PM
  * Description: ...
  */
-public interface NotificationRepository extends JpaRepository<Notification, Long> {
+public interface NotificationRepository extends JpaRepository<Notification, Integer> {
 }
