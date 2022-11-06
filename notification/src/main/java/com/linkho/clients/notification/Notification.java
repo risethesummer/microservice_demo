@@ -29,7 +29,7 @@ public class Notification {
             generator = "notification_id_sequence",
             strategy = GenerationType.SEQUENCE
     )
-    private Long id;
+    private Integer id;
     private Integer customerId;
     private String toCustomerEmail;
     private String sender;
