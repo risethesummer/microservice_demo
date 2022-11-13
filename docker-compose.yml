@@ -35,8 +35,90 @@ services:
     container_name: zipkin
     ports:
       - "9411:9411"
+    networks:
+      - spring
+  rabbitmq:
+    image: rabbitmq:3.9.11-management-alpine
+    container_name: rabbitmq
+    networks:
+      - spring
+    ports:
+      #Publish port
+      - "5672:5672"
+      #Consume port
+      - "15672:15672"
+  eureka-server:
+    image: linkho1905/eureka-server:latest
+    container_name: eureka-server
+    ports:
+      - "8761:8761"
+    depends_on:
+      - zipkin
+    environment:
+      - SPRING_PROFILES_ACTIVE=docker
+    networks:
+      - spring
+  apigw:
+    image: linkho1905/apigw:latest
+    container_name: apigw
+    ports:
+      - "8083:8083"
+    environment:
+      - SPRING_PROFILES_ACTIVE=docker
+    depends_on:
+      - zipkin
+      - eureka-server
+    networks:
+      - spring
+  customer:
+    image: linkho1905/customer:latest
+    container_name: customer
+    ports:
+      "8080:8080"
+    networks:
+      - spring
+      - postgres
+    depends_on:
+      - eureka-server
+      - zipkin
+      - rabbitmq
+      - postgres
+    environment:
+      - SPRING_PROFILES_ACTIVE=docker
+  fraud:
+    image: linkho1905/fraud:latest
+    container_name: fraud
+    ports:
+      "8081:8081"
+    networks:
+      - spring
+      - postgres
+    depends_on:
+      - eureka-server
+      - zipkin
+      - rabbitmq
+      - postgres
+    environment:
+      - SPRING_PROFILES_ACTIVE=docker
+  notification:
+    image: linkho1905/notification:latest
+    container_name: notification
+    ports:
+      "8082:8082"
+    networks:
+      - spring
+      - postgres
+    depends_on:
+      - eureka-server
+      - zipkin
+      - rabbitmq
+      - postgres
+    environment:
+      - SPRING_PROFILES_ACTIVE=docker
 
 networks:
+  spring:
+    driver: bridge
   #Docker will use this network (postgres.) to connect to another container
   postgres:
     driver: bridge

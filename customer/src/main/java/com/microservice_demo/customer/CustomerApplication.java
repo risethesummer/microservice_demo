@@ -11,7 +11,12 @@ import org.springframework.cloud.openfeign.EnableFeignClients;
  * Date 11/6/2022 - 1:03 PM
  * Description: ...
  */
-@SpringBootApplication
+@SpringBootApplication(
+        scanBasePackages = {
+                "com.microservice_demo.customer",
+                "org.linkho.amqp"
+        }
+)
 @EnableEurekaClient
 @EnableFeignClients(
         basePackages = "com.linkho.clients"

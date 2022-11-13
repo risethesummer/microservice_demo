@@ -1,4 +1,4 @@
-package com.linkho.clients.notification;
+package com.linkho.notification;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

@@ -9,7 +9,6 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>clients</artifactId>
     <packaging>jar</packaging>
     <build>
         <plugins>
@@ -23,5 +22,12 @@
             </plugin>
         </plugins>
     </build>
+    <artifactId>amqp</artifactId>
 
+    <dependencies>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-amqp</artifactId>
+        </dependency>
+    </dependencies>
 </project>

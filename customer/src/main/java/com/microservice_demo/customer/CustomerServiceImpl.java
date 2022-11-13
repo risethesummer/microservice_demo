@@ -2,9 +2,9 @@ package com.microservice_demo.customer;
 
 import com.linkho.clients.fraud.FraudCheckResponse;
 import com.linkho.clients.fraud.FraudClient;
-import com.linkho.clients.notification.NotificationClient;
-import com.linkho.clients.notification.NotificationRequest;
+import com.linkho.notification.NotificationRequest;
 import lombok.AllArgsConstructor;
+import org.linkho.amqp.RabbitMQMessageProducer;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -12,8 +12,8 @@ import org.springframework.stereotype.Service;
 public class CustomerServiceImpl implements CustomerService {
 
     private final CustomerRepository customerRepository;
-    private final NotificationClient notificationClient;
     private final FraudClient fraudClient;
+    private final RabbitMQMessageProducer rabbitMQMessageProducer;
     @Override
     public void registerCustomer(CustomerRegistrationRequest customerRequest) {
         Customer customer = Customer.builder()
@@ -28,11 +28,17 @@ public class CustomerServiceImpl implements CustomerService {
         if (fraudCheckRes.isFraudster())
             throw new IllegalStateException("fraudster");
 
-        notificationClient.sendNotification(new NotificationRequest(
+        NotificationRequest notificationRequest = new NotificationRequest(
                 customer.getId(),
                 customer.getEmail(),
                 String.format("Hi %s, welcome to Amigoscode...",
                         customer.getFirstName())
-        ));
+        );
+
+        rabbitMQMessageProducer.publish(
+                "internal.exchange",
+                "internal.notification.routing-key",
+                notificationRequest
+        );
     }
 }
